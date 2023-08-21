@@ -1,6 +1,5 @@
 import google.generativeai as palm
-from helper import calculator
-
+import helper
 from google.api_core import retry
 import palm_config
 
@@ -104,7 +103,7 @@ def solve(question, calc_prompt_template, answer):
             break
 
         if "<calc>" in result:
-            result = calculator(result)
+            result = helper.calculator(result)
 
         results.append(result)
         print("-" * 40)

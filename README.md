@@ -4,5 +4,3 @@
     "api_key": "<api key>"
 }
 ```
-
-2. python run.py

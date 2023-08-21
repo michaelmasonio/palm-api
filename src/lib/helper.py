@@ -1,6 +1,4 @@
 import re
-
-# Use numexpr since `eval` is unsafe.
 import numexpr
 
 
