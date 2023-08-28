@@ -22,7 +22,8 @@
 			"extensions": [
 				"ms-python.python",
 				"ms-python.black-formatter",
-				"Codeium.codeium"
+				"Codeium.codeium",
+				"eamodio.gitlens"
 			]
 		}
 	}

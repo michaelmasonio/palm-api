@@ -1,5 +1,5 @@
 import unittest
-from src.lib.palm_text_gen import text_generation
+from src.infra.palm.palm_text_gen import text_generation
 
 
 class TestTextGeneration(unittest.TestCase):

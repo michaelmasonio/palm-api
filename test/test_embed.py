@@ -1,11 +1,10 @@
 from unittest.mock import patch
 import unittest
 import numpy as np
-import src.lib.palm_embed as palm_embed
-
+from src.infra.palm import palm_embed as palm_embed
 
 class TestCreateEmbedding(unittest.TestCase):
-    @patch("src.lib.palm_embed.palm.generate_embeddings")
+    @patch("src.infra.palm.palm_embed.palm.generate_embeddings")
     def test_create_embedding(self, mock_generate_embeddings):
         """
         Test the create_embedding function.
