@@ -1,7 +1,7 @@
 import google.generativeai as palm
-import helper
 from google.api_core import retry
-import palm_config
+from src.infra.palm.calculator import calculator
+from src.infra.palm import palm_config as palm_config
 
 cfg = palm_config.load_config()
 api_key = cfg["api_key"]
@@ -85,7 +85,7 @@ def solve(question, calc_prompt_template, answer):
 
     results = []
 
-    for n in range(20):
+    for n in range(11):
         prompt = calc_prompt_template.format(question=question)
 
         prompt += " ".join(results)
@@ -103,7 +103,7 @@ def solve(question, calc_prompt_template, answer):
             break
 
         if "<calc>" in result:
-            result = helper.calculator(result)
+            result = calculator.calculator(result)
 
         results.append(result)
         print("-" * 40)

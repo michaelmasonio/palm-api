@@ -1,3 +1,5 @@
 google-generativeai
 numpy
 numexpr
+flask
+newspaper

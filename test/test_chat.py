@@ -1,5 +1,5 @@
 import unittest
-from src.lib.palm_chat import chat
+from src.infra.palm.palm_chat import chat
 
 
 class TestChat(unittest.TestCase):
