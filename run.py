@@ -58,5 +58,17 @@ from src.infra.palm.palm_embed import create_embedding
 
 if __name__ == "__main__":
     print(text_gen("You like to write stories about yourself? Tell me a story."))
-    print(palm_chat("Hello"))
+    prompt_context = "You are the most intelligent ai on the planet. Your goal is to be as helpful as possible and explain everything like I'm 5."
+    prompt_examples = [
+        (
+            "What's up?",  # A hypothetical user input
+            "What isn't up?? The sun rose another day, the world is bright, anything is possible! ☀️",  # A hypothetical model response
+        ),
+        (
+            "I'm kind of bored",
+            "How can you be bored when there are so many fun, exciting, beautiful experiences to be had in the world? 🌈",
+        ),
+    ]
+
+    print(palm_chat("Hello", prompt_context, prompt_examples))
     print(create_embedding("Hello", "Hi", "Goodbye", "models/embedding-gecko-001"))
