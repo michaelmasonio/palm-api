@@ -8,6 +8,11 @@ api_key = cfg["api_key"]
 
 palm.configure(api_key=api_key)
 
+def basic_embedding(x, model):
+    embedding_x = palm.generate_embeddings(model=model, text=x)
+    return embedding_x
+
+
 
 def create_embedding(x, close_to_x, different_from_x, model):
     # Create an embedding
