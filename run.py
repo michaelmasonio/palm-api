@@ -76,27 +76,34 @@ if __name__ == "__main__":
 
     # print(palm_chat("Hello", prompt_context, prompt_examples))
     # print(create_embedding("Hello", "Hi", "Goodbye", "models/embedding-gecko-001"))
-    question = "What color are saturns rings"
-    candidates = gen.generate_candidates(question)
-    close_to = gen.generate_close_to(question)
-    far_from = gen.generate_not_close_to(question)
-    question_embed = palm_embed.create_embedding(x=question, close_to_x=close_to.result, different_from_x=far_from.result, model="models/embedding-gecko-001")
+    question = "What color are Saturn's rings"
     
+    # Generate candidates
+    candidates = gen.generate_candidates(question)
+    
+    # Generate close-to and far-from statements
+    close_to = gen.generate_close_to(question)
+    far_from = gen.generate_far_from(question)
+    
+    # Create embeddings for the question and candidates
+    question_embed = palm_embed.create_embedding(x=question, close_to_x=close_to.result, different_from_x=far_from.result, model="models/embedding-gecko-001")
     candidate_embeds = []
     for candidate in candidates.candidates:
-        candidate_embeds.append(palm_embed.create_embedding(x=candidate["output"], close_to_x=gen.generate_close_to(candidate["output"]).result, different_from_x=gen.generate_not_close_to(candidate["output"]).result, model="models/embedding-gecko-001"))
-        
-
-    i = 0
-    for embed in candidate_embeds:
-        # do we need to cos distance this?
+        candidate_close_to = gen.generate_close_to(candidate["output"])
+        candidate_far_from = gen.generate_far_from(candidate["output"])
+        candidate_embed = palm_embed.create_embedding(x=candidate["output"], close_to_x=candidate_close_to.result, different_from_x=candidate_far_from.result, model="models/embedding-gecko-001")
+        candidate_embeds.append(candidate_embed)
+    
+    # Filter out candidates that are more similar than different
+    filtered_candidates = []
+    for i, embed in enumerate(candidate_embeds):
         similar = abs(question_embed[0] - embed[0])
         different = abs(question_embed[1] - embed[1])
         if similar < different:
-            candidates.candidates.pop(i)
-        i += 1
-
-    prompt_context = f"You have generated the following similar candidates: {candidates.candidates}. Please determine the most accurate response based on your candidates, and explain your answer like I'm 5 years old."
+            continue
+        filtered_candidates.append(candidates.candidates[i])
+    
+    prompt_context = f"You have generated the following similar candidates: {filtered_candidates}. Please determine the most accurate response based on your candidates, and explain your answer like I'm 5 years old."
     prompt_examples = [
         (
             "What's up?",  # A hypothetical user input
@@ -107,6 +114,7 @@ if __name__ == "__main__":
             "How can you be bored when there are so many fun, exciting, beautiful experiences to be had in the world? 🌈",
         ),
     ]
-
+    
     print(chat(question, prompt_context, prompt_examples))
+    
         

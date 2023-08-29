@@ -8,26 +8,29 @@ api_key = cfg["api_key"]
 
 palm.configure(api_key=api_key)
 
-def basic_embedding(x, model):
-    embedding_x = palm.generate_embeddings(model=model, text=x)
-    return embedding_x
-
-
 
 def create_embedding(x, close_to_x, different_from_x, model):
-    # Create an embedding
+    """
+    Generate embeddings for the given texts and calculate similarity measures.
+
+    Parameters:
+        x (str): The text for which to generate the embedding.
+        close_to_x (str): The text close to x for which to generate the embedding.
+        different_from_x (str): The text different from x for which to generate the embedding.
+        model: The embedding model to use for generating the embeddings.
+
+    Returns:
+        similar_measure (float): The similarity measure between the embeddings of x and close_to_x.
+        different_measure (float): The similarity measure between the embeddings of x and different_from_x.
+    """
+    # Create embeddings
     embedding_x = palm.generate_embeddings(model=model, text=x)
     embedding_close_to_x = palm.generate_embeddings(model=model, text=close_to_x)
-    embedding_different_from_x = palm.generate_embeddings(
-        model=model, text=different_from_x
-    )
+    embedding_different_from_x = palm.generate_embeddings(model=model, text=different_from_x)
 
-    similar_measure = np.dot(
-        embedding_x["embedding"], embedding_close_to_x["embedding"]
-    )
-    different_measure = np.dot(
-        embedding_x["embedding"], embedding_different_from_x["embedding"]
-    )
+    # Calculate similarity measures
+    similar_measure = np.dot(embedding_x["embedding"], embedding_close_to_x["embedding"])
+    different_measure = np.dot(embedding_x["embedding"], embedding_different_from_x["embedding"])
 
     return similar_measure, different_measure
 
