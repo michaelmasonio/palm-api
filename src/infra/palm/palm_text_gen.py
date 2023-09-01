@@ -1,8 +1,10 @@
+from typing import Dict, List
 import google.generativeai as palm
 from google.api_core import retry
 
 from src.infra.palm.calculator import calculator
 from src.infra.palm import palm_config as palm_config
+from src.infra.palm import palm_embed as palm_embed
 
 cfg = palm_config.load_config()
 api_key = cfg["api_key"]
@@ -100,6 +102,31 @@ def generate_far_from(question: str) -> str:
     )
     
     return completion
+
+def filter_candidates(question: str, candidates: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    # Generate close-to and far-from statements
+    close_to = generate_close_to(question)
+    far_from = generate_far_from(question)
+    
+    # Create embeddings for the question and candidates
+    question_embed = palm_embed.create_embedding(x=question, close_to_x=close_to.result, different_from_x=far_from.result, model="models/embedding-gecko-001")
+    candidate_embeds = []
+    for candidate in candidates:
+        candidate_close_to = generate_close_to(candidate["output"])
+        candidate_far_from = generate_far_from(candidate["output"])
+        candidate_embed = palm_embed.create_embedding(x=candidate["output"], close_to_x=candidate_close_to.result, different_from_x=candidate_far_from.result, model="models/embedding-gecko-001")
+        candidate_embeds.append(candidate_embed)
+    
+    # Filter out candidates that are more similar than different
+    filtered_candidates = []
+    for i, embed in enumerate(candidate_embeds):
+        similar = abs(question_embed[0] - embed[0])
+        different = abs(question_embed[1] - embed[1])
+        if similar < different:
+            continue
+        filtered_candidates.append(candidates[i])
+    
+    return filtered_candidates
 
 
 # def text_gen_with_external_function(prompt):
