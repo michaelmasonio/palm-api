@@ -1,7 +1,7 @@
 import google.generativeai as palm
 import numpy as np
 
-from src.infra.palm import palm_config as palm_config
+from infra.palm import palm_config as palm_config
 
 cfg = palm_config.load_config()
 api_key = cfg["api_key"]
@@ -26,11 +26,17 @@ def create_embedding(x, close_to_x, different_from_x, model):
     # Create embeddings
     embedding_x = palm.generate_embeddings(model=model, text=x)
     embedding_close_to_x = palm.generate_embeddings(model=model, text=close_to_x)
-    embedding_different_from_x = palm.generate_embeddings(model=model, text=different_from_x)
+    embedding_different_from_x = palm.generate_embeddings(
+        model=model, text=different_from_x
+    )
 
     # Calculate similarity measures
-    similar_measure = np.dot(embedding_x["embedding"], embedding_close_to_x["embedding"])
-    different_measure = np.dot(embedding_x["embedding"], embedding_different_from_x["embedding"])
+    similar_measure = np.dot(
+        embedding_x["embedding"], embedding_close_to_x["embedding"]
+    )
+    different_measure = np.dot(
+        embedding_x["embedding"], embedding_different_from_x["embedding"]
+    )
 
     return similar_measure, different_measure
 

@@ -2,4 +2,5 @@ google-generativeai
 numpy
 numexpr
 flask
-newspaper3k
+llama-index
+python-dotenv
