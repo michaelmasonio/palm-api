@@ -1,6 +1,6 @@
 import google.generativeai as palm
 
-import src.infra.palm.palm_config as palm_config
+import infra.palm.palm_config as palm_config
 
 cfg = palm_config.load_config()
 api_key = cfg["api_key"]

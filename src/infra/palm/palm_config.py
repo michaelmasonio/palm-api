@@ -1,9 +1,16 @@
-import json
+import os
+from dotenv import load_dotenv
 
 
 def load_config():
-    # Read the configuration from config.json
-    with open("secrets.json") as f:
-        config = json.load(f)
+    # Load the environment variables from .env file
+    load_dotenv()
+
+    # Access the configuration values using os.getenv
+    api_key = os.getenv("PALM_API_KEY")
+
+    config = {
+        "api_key": api_key,
+    }
 
     return config

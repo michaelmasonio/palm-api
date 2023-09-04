@@ -1,2 +1,41 @@
-__pycache__
-secrets.json
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyz
+*.pyw
+*.pyi
+*.pyproj
+*.egg-info/
+dist/
+build/
+*.egg
+.env
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*~
+
+# Virtual Environment
+venv/
+env/
+.env/
+
+# Compiled files
+*.class
+*.jar
+*.war
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Miscellaneous
+*.log
+*.bak
+.DS_Store
+Thumbs.db
